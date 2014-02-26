@@ -14,6 +14,8 @@ RUN rabbitmq-plugins enable rabbitmq_web_stomp rabbitmq_stomp rabbitmq_managemen
 RUN apt-get install openssl -y
 ADD ssl /ssl
 
+ADD rabbitmq.config /etc/rabbitmq/rabbitmq.config
+
 ADD run.sh /run.sh
 RUN chmod +x /run.sh
 
