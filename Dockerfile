@@ -16,8 +16,8 @@ ADD ssl /ssl
 
 ADD rabbitmq.config /etc/rabbitmq/rabbitmq.config
 
-ADD run.sh /run.sh
-RUN chmod +x /run.sh
+ADD scripts /scripts
+RUN chmod +x /scripts/*.sh
 
 # ports are:
 # * SSL AMQP
@@ -25,4 +25,4 @@ RUN chmod +x /run.sh
 # * Management
 EXPOSE 5671 61614 15672 5672 61613
 
-CMD ["/run.sh"]
+CMD ["/scripts/run.sh"]

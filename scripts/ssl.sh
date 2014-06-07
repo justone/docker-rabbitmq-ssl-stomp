@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# set up ssl certificates
+
 if [[ ! -e /etc/rabbitmq/ssl ]]; then
     cd /ssl/testca
     openssl req -x509 -config openssl.cnf -newkey rsa:2048 -days 365 -out cacert.pem -outform PEM -subj /CN=MyTestCA/ -nodes
@@ -16,9 +18,3 @@ if [[ ! -e /etc/rabbitmq/ssl ]]; then
     cp /ssl/server/cert.pem /etc/rabbitmq/ssl/
     cp /ssl/server/key.pem /etc/rabbitmq/ssl/
 fi
-
-# make sure the rabbitmq user owns directories that may be mounts
-chown -R rabbitmq:rabbitmq /var/lib/rabbitmq/mnesia
-chown -R rabbitmq:rabbitmq /var/log/rabbitmq
-
-/usr/sbin/rabbitmq-server
