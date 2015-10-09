@@ -1,4 +1,4 @@
-FROM       ubuntu:13.10
+FROM       debian:jessie
 MAINTAINER Nate Jones <nate@endot.org>
 
 RUN echo "deb http://www.rabbitmq.com/debian/ testing main" > /etc/apt/sources.list.d/rabbitmq.list
