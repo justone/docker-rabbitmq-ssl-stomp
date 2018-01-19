@@ -1,15 +1,19 @@
-FROM       ubuntu:13.10
+FROM       ubuntu:14.04
 MAINTAINER Nate Jones <nate@endot.org>
 
-RUN echo "deb http://www.rabbitmq.com/debian/ testing main" > /etc/apt/sources.list.d/rabbitmq.list
-RUN apt-get update
-RUN apt-get install wget -y
-RUN wget http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
-RUN apt-key add rabbitmq-signing-key-public.asc
+RUN apt-get update && apt-get install -y apt-transport-https wget
 
-RUN apt-get update
-RUN apt-get install rabbitmq-server -y
-RUN rabbitmq-plugins enable rabbitmq_web_stomp rabbitmq_stomp rabbitmq_management
+# install rabbitmq, which requires a newer erlang package
+RUN echo "deb https://dl.bintray.com/rabbitmq/debian trusty main" > /etc/apt/sources.list.d/bintray.rabbitmq.list && \
+    echo "deb https://packages.erlang-solutions.com/ubuntu trusty contrib" > /etc/apt/sources.list.d/esl.erlang.list && \
+    wget -O- https://dl.bintray.com/rabbitmq/Keys/rabbitmq-release-signing-key.asc | apt-key add - && \
+    wget -O- wget https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | apt-key add - && \
+    apt-get update && \
+    apt-get install rabbitmq-server -y
+
+# enable plugins, and restore ownership of the cookie
+RUN rabbitmq-plugins enable rabbitmq_web_stomp rabbitmq_stomp rabbitmq_management && \
+    chown rabbitmq:rabbitmq /var/lib/rabbitmq/.erlang.cookie
 
 RUN apt-get install openssl -y
 ADD ssl /ssl
